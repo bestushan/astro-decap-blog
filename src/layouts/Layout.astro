@@ -1,0 +1,26 @@
+---
+// src/layouts/Layout.astro
+---
+
+<html>
+  <head>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      // If the user lands here from an invitation email,
+      // redirect them to the admin panel after they set their password.
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
