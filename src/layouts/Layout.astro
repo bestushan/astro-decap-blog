@@ -10,10 +10,15 @@
   <body>
     <slot />
     <script>
-      // If the user lands here from an invitation email,
-      // redirect them to the admin panel after they set their password.
+      // This tells TypeScript to treat netlifyIdentity as an 'any' type on the window object
+      declare global {
+        interface Window {
+          netlifyIdentity: any;
+        }
+      }
+
       if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", (user) => {
+        window.netlifyIdentity.on("init", (user: any) => {
           if (!user) {
             window.netlifyIdentity.on("login", () => {
               document.location.href = "/admin/";
