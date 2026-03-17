@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+
+// Fetch all entries from the 'blog' collection defined in content.config.ts
+const posts = await getCollection("blog");
+
+// Sort by date (expert tip: always sort your data!)
+const sortedPosts = posts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<html>
+  <body>
+    <h1>Rukmaa Blog</h1>
+    <ul>
+      {
+        sortedPosts.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}`}>
+              {post.data.title} — {post.data.pubDate.toLocaleDateString()}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </body>
+</html>

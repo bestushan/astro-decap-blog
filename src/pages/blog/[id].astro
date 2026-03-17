@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from "astro:content";
+
+// 1. Generate a new path for every post
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+// 2. Get the post data from props
+const { post } = Astro.props;
+// 3. Render the markdown content to HTML (New in Astro v6)
+const { Content } = await render(post);
+---
+
+<html>
+  <head>
+    <title>{post.data.title}</title>
+  </head>
+  <body>
+    <article>
+      <h1>{post.data.title}</h1>
+      <p>By {post.data.author} on {post.data.pubDate.toDateString()}</p>
+      <hr />
+      <Content />
+    </article>
+  </body>
+</html>
